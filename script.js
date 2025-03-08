@@ -6,6 +6,7 @@ let isFavoritesView = false;
 
 //Fetch news with infinite scroll
 async function fetchNews(category = 'general', page = 1, append = false) {
+  console.log("✅ fetchNews() function is being called!");
   if (isLoading || isFavoritesView) return;
   isLoading = true;
   showSpinner();

@@ -8,30 +8,31 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const NEWS_API_KEY = process.env.NEWS_API_KEY;
 
-// ✅ Error handling if NEWS_API_KEY is missing
+// Stop the server if NEWS_API_KEY is missing
 if (!NEWS_API_KEY) {
     console.error("❌ NEWS_API_KEY is missing! Set it in the environment variables.");
-    process.exit(1); // Stop the server if API key is missing
+    process.exit(1); 
 }
 
-// ✅ Enable CORS
 app.use(cors());
 
-// ✅ Serve a welcome message at `/`
+// ✅ Serve frontend files, allowing `.html` and `.htm` extensions
+app.use(express.static(path.join(__dirname, 'public'), {
+    extensions: ['html', 'htm']
+}));
+
+// ✅ Ensure visiting `/` loads `index.html`
 app.get('/', (req, res) => {
-    res.send("✅ Server is running! Use /news?category=general to get news.");
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ✅ Serve the frontend files if a frontend exists
-app.use(express.static(path.join(__dirname, 'public')));
-
-// ✅ News API endpoint with Debug Logging
+// ✅ News API endpoint with debug logs
 app.get('/news', async (req, res) => {
     try {
         const category = req.query.category || 'general';
         console.log(`🔍 Fetching news for category: ${category}`);
 
-        const response = await axios.get(`https://newsapi.org/v2/top-headlines`, {
+        const response = await axios.get('https://newsapi.org/v2/top-headlines', {
             params: {
                 category: category,
                 country: 'us',
@@ -39,8 +40,8 @@ app.get('/news', async (req, res) => {
             }
         });
 
-        console.log("📡 NewsAPI Response Status:", response.status); // Log HTTP status code
-        console.log("📰 NewsAPI Response Data:", JSON.stringify(response.data, null, 2)); // Log full response
+        console.log("📡 NewsAPI Response Status:", response.status);
+        console.log("📰 NewsAPI Response Data:", JSON.stringify(response.data, null, 2));
 
         if (!response.data.articles || response.data.articles.length === 0) {
             console.log("❌ No articles found");
@@ -54,7 +55,16 @@ app.get('/news', async (req, res) => {
     }
 });
 
+// ✅ Catch-all route: Serve `index.html` for unknown routes (SPA support)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // ✅ Start the server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on ${process.env.NODE_ENV === 'production' ? 'your DigitalOcean URL' : `http://localhost:${PORT}`}`);
+    console.log(`🚀 Server running on ${
+      process.env.NODE_ENV === 'production' 
+        ? 'your DigitalOcean URL' 
+        : `http://localhost:${PORT}`
+    }`);
 });

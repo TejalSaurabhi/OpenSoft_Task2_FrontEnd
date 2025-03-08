@@ -8,25 +8,24 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const NEWS_API_KEY = process.env.NEWS_API_KEY;
 
-// Stop the server if NEWS_API_KEY is missing
+//Stop the server if NEWS_API_KEY is missing
 if (!NEWS_API_KEY) {
-    console.error("❌ NEWS_API_KEY is missing! Set it in the environment variables.");
+    console.error("NEWS_API_KEY is missing! Set it in the environment variables.");
     process.exit(1); 
 }
 
 app.use(cors());
 
-// ✅ Serve frontend files, allowing `.html` and `.htm` extensions
+//Serve frontend files, allowing `.html` and `.htm` extensions
 app.use(express.static(path.join(__dirname, 'public'), {
     extensions: ['html', 'htm']
 }));
 
-// ✅ Ensure visiting `/` loads `index.html`
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ✅ News API endpoint with debug logs
 app.get('/news', async (req, res) => {
     try {
         const category = req.query.category || 'general';
@@ -35,7 +34,6 @@ app.get('/news', async (req, res) => {
         const response = await axios.get('https://newsapi.org/v2/top-headlines', {
             params: {
                 category: category,
-                country: 'us',
                 apiKey: NEWS_API_KEY
             }
         });
@@ -55,12 +53,11 @@ app.get('/news', async (req, res) => {
     }
 });
 
-// ✅ Catch-all route: Serve `index.html` for unknown routes (SPA support)
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ✅ Start the server
+//Start the server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on ${
       process.env.NODE_ENV === 'production' 

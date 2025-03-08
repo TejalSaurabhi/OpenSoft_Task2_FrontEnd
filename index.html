@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>News Aggregator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>News Aggregator</h1>
+    <!-- Toggle button to see favorites -->
+    <div id="top-controls">
+      <button id="toggleFavoritesBtn">View Favorites</button>
+    </div>
+  </header>
+
+  <!-- Category filter (visible only when in All News view) -->
+  <div id="controls">
+    <label for="categorySelect">Choose a category:</label>
+    <select id="categorySelect">
+      <option value="general">General</option>
+      <option value="business">Business</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="health">Health</option>
+      <option value="science">Science</option>
+      <option value="sports">Sports</option>
+      <option value="technology">Technology</option>
+    </select>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div id="spinner" class="spinner" style="display: none;"></div>
+
+  <!-- Container for News or Favorites -->
+  <div id="news-container" class="cards-grid"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

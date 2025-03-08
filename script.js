@@ -61,11 +61,21 @@ function displayNews(articles = [], append = false) {
     const randomViews = Math.floor(Math.random() * (17000 - 700 + 1)) + 700;
     const randomComments = Math.floor(randomViews / 100);
 
+    // If article.urlToImage is missing or not a valid URL, use placeholder
+    const imageUrl = article.urlToImage 
+      ? article.urlToImage 
+      : 'https://via.placeholder.com/400?text=No+Image+Available';
+
     const card = document.createElement('article');
     card.className = 'news-card';
 
     card.innerHTML = `
-      <img class="card-image" src="${article.urlToImage || 'https://via.placeholder.com/400'}" alt="News Image" />
+      <img 
+        class="card-image"
+        src="${imageUrl}"
+        alt="News Image"
+        onerror="this.onerror=null;this.src='https://via.placeholder.com/400?text=No+Image+Available';"
+      />
       <div class="card-body">
         <span class="date-label">${timeAgo}</span>
         <h3>${article.title || 'No Title Available'}</h3>
@@ -191,11 +201,20 @@ function displayFavorites() {
     const randomViews = Math.floor(Math.random() * (17000 - 700 + 1)) + 700;
     const randomComments = Math.floor(randomViews / 100);
 
+    const imageUrl = article.urlToImage 
+      ? article.urlToImage 
+      : 'https://via.placeholder.com/400?text=No+Image+Available';
+
     const card = document.createElement('article');
     card.className = 'news-card';
 
     card.innerHTML = `
-      <img class="card-image" src="${article.urlToImage || 'https://via.placeholder.com/400'}" alt="News Image" />
+      <img 
+        class="card-image" 
+        src="${imageUrl}" 
+        alt="News Image"
+        onerror="this.onerror=null;this.src='https://via.placeholder.com/400?text=No+Image+Available';"
+      />
       <div class="card-body">
         <span class="date-label">${timeAgo}</span>
         <h3>${article.title || 'No Title Available'}</h3>

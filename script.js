@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5001';
+const BASE_URL = 'https://orca-app-4olxq.ondigitalocean.app/';
 let currentCategory = 'general';
 let currentPage = 1;
 let isLoading = false;

@@ -1,19 +1,18 @@
-// 🚫 IMPORTANT: No trailing slash at the end of BASE_URL
+
 const BASE_URL = 'https://orca-app-4olxq.ondigitalocean.app';
 let currentCategory = 'general';
 let currentPage = 1;
 let isLoading = false;
 let isFavoritesView = false;
 
-// Fetch news with infinite scroll
+//infinite scroll
 async function fetchNews(category = 'general', page = 1, append = false) {
   console.log("✅ fetchNews() function is being called!");
   if (isLoading || isFavoritesView) return;
   isLoading = true;
   showSpinner();
 
-  try {
-    // Build the full endpoint, ensuring single slash
+  try {//end point
     const response = await fetch(`${BASE_URL}/news?category=${category}&page=${page}`);
     const data = await response.json();
     hideSpinner();
@@ -36,7 +35,7 @@ async function fetchNews(category = 'general', page = 1, append = false) {
   }
 }
 
-// Show/Hide spinner
+//Show/Hide spinner
 function showSpinner() {
   document.getElementById('spinner').style.display = 'block';
 }
@@ -44,7 +43,7 @@ function hideSpinner() {
   document.getElementById('spinner').style.display = 'none';
 }
 
-// Display news or favorites articles in the main container
+//Display news or favorites articles in the main container
 function displayNews(articles = [], append = false) {
   const newsContainer = document.getElementById('news-container');
   if (!append) newsContainer.innerHTML = '';
@@ -61,7 +60,6 @@ function displayNews(articles = [], append = false) {
     const randomViews = Math.floor(Math.random() * (17000 - 700 + 1)) + 700;
     const randomComments = Math.floor(randomViews / 100);
 
-    // If article.urlToImage is missing or not a valid URL, use placeholder
     const imageUrl = article.urlToImage 
       ? article.urlToImage 
       : 'https://via.placeholder.com/400?text=No+Image+Available';
@@ -93,13 +91,13 @@ function displayNews(articles = [], append = false) {
     `;
     newsContainer.appendChild(card);
 
-    // Attach favorite button listener
+    //Favorite button listener
     const favoriteBtn = card.querySelector('.favorite-btn');
     updateFavoriteButton(favoriteBtn, article);
     favoriteBtn.addEventListener('click', () => {
       toggleFavorite(article);
       updateFavoriteButton(favoriteBtn, article);
-      // If in favorites view, refresh after change
+      //If in favorites view, refresh after change
       if (isFavoritesView) displayFavorites();
     });
 
@@ -110,7 +108,7 @@ function displayNews(articles = [], append = false) {
   });
 }
 
-// Calculate "x days/weeks ago" from published date
+//Calculate "x days/weeks ago" from published date
 function calculateTimeAgo(publishedDate) {
   const now = new Date();
   const diffInMs = now - publishedDate;
@@ -123,7 +121,7 @@ function calculateTimeAgo(publishedDate) {
   return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
 }
 
-// Favorites & local storage functions
+//Favorites & local storage functions
 function getFavorites() {
   return JSON.parse(localStorage.getItem('favorites')) || [];
 }
@@ -144,7 +142,7 @@ function isFavorited(article) {
   return getFavorites().some(fav => fav.url === article.url);
 }
 
-// Update favorite button using class toggling
+//Update favorite button using class toggling
 function updateFavoriteButton(button, article) {
   if (isFavorited(article)) {
     button.textContent = 'Remove Favorite';
@@ -155,7 +153,7 @@ function updateFavoriteButton(button, article) {
   }
 }
 
-// Share article functionality
+//Share article functionality
 function shareArticle(article) {
   if (navigator.share) {
     navigator.share({
@@ -183,7 +181,7 @@ function copyToClipboard(text) {
   document.body.removeChild(textarea);
 }
 
-// Display Favorites in the main container
+//Display Favorites in the main container
 function displayFavorites() {
   const favorites = getFavorites();
   const newsContainer = document.getElementById('news-container');
@@ -247,7 +245,7 @@ function displayFavorites() {
   });
 }
 
-// Infinite scroll
+//Infinite scroll
 window.addEventListener('scroll', () => {
   if (!isFavoritesView && window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 && !isLoading) {
     currentPage++;
@@ -255,7 +253,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Toggle favorites view
+//Toggle favorites view
 document.getElementById('toggleFavoritesBtn').addEventListener('click', () => {
   isFavoritesView = !isFavoritesView;
   const toggleBtn = document.getElementById('toggleFavoritesBtn');
@@ -273,7 +271,7 @@ document.getElementById('toggleFavoritesBtn').addEventListener('click', () => {
   }
 });
 
-// Category change listener
+//Category change listener
 document.getElementById('categorySelect').addEventListener('change', (e) => {
   currentCategory = e.target.value;
   currentPage = 1;
@@ -282,7 +280,7 @@ document.getElementById('categorySelect').addEventListener('change', (e) => {
   }
 });
 
-// Initial fetch
+//Initial fetch
 if (!isFavoritesView) {
   fetchNews(currentCategory, currentPage, false);
 }
